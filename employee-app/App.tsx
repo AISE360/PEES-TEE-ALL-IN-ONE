@@ -1,4 +1,6 @@
 import React from "react";
+import "react-native-gesture-handler";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./src/screens/Login";
@@ -12,16 +14,18 @@ import SelfService from "./src/screens/SelfService";
 const Stack = createNativeStackNavigator();
 export default function App(){
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown:false}}>
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Directive" component={Directive} />
-        <Stack.Screen name="Dashboard" component={Dashboard} />
-        <Stack.Screen name="ClockIn" component={ClockIn} />
-        <Stack.Screen name="KYC" component={KYC} />
-        <Stack.Screen name="PaymentSuccess" component={PaymentSuccess} />
-        <Stack.Screen name="Profile" component={SelfService} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <GestureHandlerRootView style={{flex:1}}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{headerShown:false}}>
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Directive" component={Directive} />
+          <Stack.Screen name="Dashboard" component={Dashboard} />
+          <Stack.Screen name="ClockIn" component={ClockIn} />
+          <Stack.Screen name="KYC" component={KYC} />
+          <Stack.Screen name="PaymentSuccess" component={PaymentSuccess} />
+          <Stack.Screen name="Profile" component={SelfService} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }

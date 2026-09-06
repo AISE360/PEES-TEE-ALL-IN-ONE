@@ -1,41 +1,41 @@
-﻿{
-    "expo":  {
-                 "name":  "PEES Tee Client",
-                 "slug":  "pees-tee-client",
-                 "version":  "1.0.0",
-                 "orientation":  "portrait",
-                 "icon":  "./assets/icon.png",
-                 "splash":  {
-                                "backgroundColor":  "#0F2440",
-                                "image":  "./assets/splash.png",
-                                "resizeMode":  "contain"
-                            },
-                 "plugins":  [
-                                 "expo-local-authentication",
-                                 "expo-image-picker"
-                             ],
-                 "android":  {
-                                 "package":  "com.peestee.client",
-                                 "versionCode":  1,
-                                 "adaptiveIcon":  {
-                                                      "backgroundColor":  "#0F2440",
-                                                      "foregroundImage":  "./assets/icon.png"
-                                                  }
-                             },
-                 "ios":  {
-                             "bundleIdentifier":  "com.peestee.client"
-                         },
-                 "scheme":  "peestee-client",
-                 "platforms":  [
-                                   "android",
-                                   "ios",
-                                   "web"
-                               ],
-                 "extra":  {
-                               "eas":  {
-                                           "projectId":  "pees-tee-client-demo"
-                                       },
-                               "apiUrl":  "https://your-backend.onrender.com"
-                           }
-             }
+{
+  "expo": {
+    "name": "PEES Tee Client",
+    "slug": "pees-tee-client",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "backgroundColor": "#FFFFFF",
+      "image": "./assets/splash.png",
+      "resizeMode": "contain"
+    },
+    "plugins": [
+      "expo-local-authentication",
+      "expo-image-picker"
+    ],
+    "android": {
+      "package": "com.peestee.client",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#0F2440",
+        "foregroundImage": "./assets/icon.png"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.peestee.client"
+    },
+    "scheme": "peestee-client",
+    "platforms": [
+      "android",
+      "ios",
+      "web"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "pees-tee-client-demo"
+      },
+      "apiUrl": "https://your-backend.onrender.com"
+    }
+  }
 }

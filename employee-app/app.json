@@ -1,55 +1,55 @@
 {
-    "expo":  {
-                 "name":  "PEES Tee Employee",
-                 "slug":  "pees-tee-employee",
-                 "version":  "1.0.0",
-                 "orientation":  "portrait",
-                 "icon":  "./assets/icon.png",
-                 "splash":  {
-                                "backgroundColor":  "#0F2440",
-                                "image":  "./assets/splash.png",
-                                "resizeMode":  "contain"
-                            },
-                 "android":  {
-                                 "package":  "com.peestee.employee",
-                                 "versionCode":  1,
-                                 "adaptiveIcon":  {
-                                                      "backgroundColor":  "#0F2440",
-                                                      "foregroundImage":  "./assets/icon.png"
-                                                  },
-                                 "permissions":  [
-                                                     "ACCESS_FINE_LOCATION",
-                                                     "ACCESS_COARSE_LOCATION",
-                                                     "CAMERA",
-                                                     "RECORD_AUDIO"
-                                                 ]
-                             },
-                 "ios":  {
-                             "bundleIdentifier":  "com.peestee.employee"
-                         },
-                 "scheme":  "peestee-employee",
-                 "platforms":  [
-                                   "android",
-                                   "ios",
-                                   "web"
-                               ],
-                 "extra":  {
-                               "apiUrl":  "https://your-backend.onrender.com"
-                           },
-                 "plugins":  [
-                                 "expo-local-authentication",
-                                 [
-                                     "expo-location",
-                                     {
-                                         "locationAlwaysAndWhenInUsePermission":  "Allow PEES Tee to use your location for geofenced clock-in."
-                                     }
-                                 ],
-                                 [
-                                     "expo-image-picker",
-                                     {
-                                         "photosPermission":  "Allow PEES Tee to access your photos for KYC."
-                                     }
-                                 ]
-                             ]
-             }
+  "expo": {
+    "name": "PEES Tee Employee",
+    "slug": "pees-tee-employee",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "backgroundColor": "#FFFFFF",
+      "image": "./assets/splash.png",
+      "resizeMode": "contain"
+    },
+    "android": {
+      "package": "com.peestee.employee",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#0F2440",
+        "foregroundImage": "./assets/icon.png"
+      },
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "CAMERA",
+        "RECORD_AUDIO"
+      ]
+    },
+    "ios": {
+      "bundleIdentifier": "com.peestee.employee"
+    },
+    "scheme": "peestee-employee",
+    "platforms": [
+      "android",
+      "ios",
+      "web"
+    ],
+    "extra": {
+      "apiUrl": "https://your-backend.onrender.com"
+    },
+    "plugins": [
+      "expo-local-authentication",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow PEES Tee to use your location for geofenced clock-in."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow PEES Tee to access your photos for KYC."
+        }
+      ]
+    ]
+  }
 }
