@@ -1,0 +1,169 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CLIENT
+  FIELD_EMPLOYEE
+  SUPERVISOR
+  HR
+  MANAGER
+  ADMIN
+}
+
+enum RequestStage {
+  APPLIED
+  CONNECTED
+  IN_PROCESSING
+  COMPLETED
+}
+
+enum PaymentMode {
+  CASH
+  UPI
+  DIGITAL_LINK
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESSFUL
+  FAILED
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PremiumStatus {
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+  FLAGGED
+}
+
+model User {
+  id            String   @id @default(cuid())
+  phone         String   @unique
+  email         String?  @unique
+  passwordHash  String?
+  role          Role     @default(CLIENT)
+  name          String?
+  employeeId    String?  @unique
+  assignedSite  Json? // { lat,lng,radiusM,name }
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  otpCodes      OtpCode[]
+  clientRequests ClientRequest[]
+  premiumApps   PremiumApplication[] @relation("EmployeeApps")
+  shifts        Shift[]
+  leaveRequests LeaveRequest[]
+  salarySlips   SalarySlip[]
+}
+
+model OtpCode {
+  id        String   @id @default(cuid())
+  phone     String
+  code      String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [phone], references: [phone])
+}
+
+model ClientRequest {
+  id                   String       @id @default(cuid())
+  clientId             String
+  client               User         @relation(fields: [clientId], references: [id])
+  serviceType          String
+  description          String
+  preferredContactTime String?
+  attachments          String[] // S3 keys
+  stage                RequestStage @default(APPLIED)
+  stageHistory         Json         @default("[]") // [{stage, at}]
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+}
+
+model PremiumApplication {
+  id           String        @id @default(cuid())
+  referenceNo  String        @unique // PTxxxxx
+  employeeId   String
+  employee     User          @relation("EmployeeApps", fields: [employeeId], references: [id])
+  clientName   String
+  dob          DateTime
+  address      String
+  contact      String
+  paymentMode  PaymentMode
+  paymentStatus PaymentStatus @default(PENDING)
+  status       PremiumStatus @default(PENDING_REVIEW)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  kycDocs      KycDocument[]
+}
+
+model KycDocument {
+  id            String   @id @default(cuid())
+  applicationId String
+  application   PremiumApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  type          String // AADHAAR_FRONT, AADHAAR_BACK, PAN, VOTER, SUPPLEMENTARY
+  url           String
+  sizeKb        Float
+  createdAt     DateTime @default(now())
+}
+
+model Shift {
+  id             String   @id @default(cuid())
+  employeeId     String
+  employee       User     @relation(fields: [employeeId], references: [id])
+  clockInAt      DateTime?
+  clockOutAt     DateTime?
+  clockInSelfie  String?
+  clockInLocation Json?
+  clockOutLocation Json?
+  isActive       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+}
+
+model LeaveRequest {
+  id         String      @id @default(cuid())
+  employeeId String
+  employee   User        @relation(fields: [employeeId], references: [id])
+  from       DateTime
+  to         DateTime
+  reason     String
+  status     LeaveStatus @default(PENDING)
+  createdAt  DateTime    @default(now())
+}
+
+model SalarySlip {
+  id         String   @id @default(cuid())
+  employeeId String
+  employee   User     @relation(fields: [employeeId], references: [id])
+  month      String // YYYY-MM
+  pdfUrl     String
+  createdAt  DateTime @default(now())
+}
+
+model Directive {
+  id        String   @id @default(cuid())
+  message   String
+  date      String // YYYY-MM-DD
+  createdBy String
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  type      String // NEW_CLIENT_REQUEST, NEW_PREMIUM, STAGE_CHANGE
+  payload   Json
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

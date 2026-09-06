@@ -1,0 +1,4 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+* { font-family: Inter, Manrope, Poppins, ui-sans-serif, system-ui; }

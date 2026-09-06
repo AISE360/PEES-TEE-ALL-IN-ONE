@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Builds & outputs
+**/android/build/
+**/android/app/build/
+**/android/.gradle/
+**/.gradle/
+**/ios/build/
+**/ios/Pods/
+*.apk
+*.aab
+*.ap_
+*.dex
+apks/
+web-portal/dist/
+backend/dist/
+*.log
+
+# Expo / RN
+.expo/
+*.jks
+*.keystore
+local.properties
+
+# Env & secrets
+.env
+*.env.local
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Temp zips
+*.zip

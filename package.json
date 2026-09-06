@@ -1,0 +1,13 @@
+{
+  "name": "pees-tee-group",
+  "private": true,
+  "workspaces": ["shared", "backend", "client-app", "employee-app", "web-portal"],
+  "scripts": {
+    "dev:backend": "npm --workspace backend run dev",
+    "dev:portal": "npm --workspace web-portal run dev",
+    "dev:client": "npm --workspace client-app run start",
+    "dev:employee": "npm --workspace employee-app run start",
+    "build": "npm --workspace shared run build && npm --workspace backend run build && npm --workspace web-portal run build",
+    "seed": "npm --workspace backend run seed"
+  }
+}

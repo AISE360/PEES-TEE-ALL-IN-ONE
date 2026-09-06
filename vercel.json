@@ -1,0 +1,6 @@
+{
+  "buildCommand": "npm --workspace web-portal run build",
+  "outputDirectory": "web-portal/dist",
+  "rewrites": [{ "source": "/api/(.*)", "destination": "https://your-backend.onrender.com/api/$1" }],
+  "env": { "VITE_API_URL": "https://your-backend.onrender.com" }
+}

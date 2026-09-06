@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  backend:
+    build: .
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - JWT_SECRET=demo-secret
+      - OTP_PROVIDER=mock
+      - CORS_ORIGIN=*
+    command: node backend/dist/index.js
+  portal:
+    build: .
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:4000
+    command: npx --workspace web-portal vite preview --port 5173 --host 0.0.0.0
+    depends_on:
+      - backend
