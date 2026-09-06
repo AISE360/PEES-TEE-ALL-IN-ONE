@@ -7,7 +7,8 @@
     "dev:portal": "npm --workspace web-portal run dev",
     "dev:client": "npm --workspace client-app run start",
     "dev:employee": "npm --workspace employee-app run start",
-    "build": "npm --workspace shared run build && npm --workspace backend run build && npm --workspace web-portal run build",
+    "build": "npm --workspace @pees-tee/web-portal run build",
+    "build:all": "npm --workspace backend run build && npm --workspace @pees-tee/web-portal run build",
     "seed": "npm --workspace backend run seed"
   }
 }
