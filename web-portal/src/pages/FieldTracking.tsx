@@ -84,11 +84,7 @@ export default function FieldTracking() {
               height="100%"
               style={{ border: 0 }}
               loading="lazy"
-              src={
-                "https://www.google.com/maps/embed/v1/place?key=" +
-                MAPS_KEY +
-                "&q=HBR+Layout,Bengaluru,Karnataka&zoom=14&maptype=roadmap"
-              }
+              src="https://maps.google.com/maps?q=HBR+Layout,Bengaluru,Karnataka&t=&z=14&ie=UTF8&iwloc=&output=embed"
             />
 
             {/* Float Overlay Indicator */}

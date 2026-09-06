@@ -316,7 +316,7 @@ export default function Dashboard() {
               style={{ border: 0 }}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              src={`https://www.google.com/maps/embed/v1/place?key=${MAPS_KEY}&q=HBR+Layout,Bengaluru,Karnataka&zoom=14&maptype=roadmap`}
+              src="https://maps.google.com/maps?q=HBR+Layout,Bengaluru,Karnataka&t=&z=14&ie=UTF8&iwloc=&output=embed"
             />
           </div>
           <div className="px-5 py-3 flex items-center gap-1.5 text-xs text-navy-400">
