@@ -34,5 +34,7 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Temp zips
+# Temp zips and temp files
 *.zip
+*.lnk
+screen.png

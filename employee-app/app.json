@@ -22,7 +22,12 @@
         "ACCESS_COARSE_LOCATION",
         "CAMERA",
         "RECORD_AUDIO"
-      ]
+      ],
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyD77yl0_MV4lnaax5oko7kg_ouls224cYA"
+        }
+      }
     },
     "ios": {
       "bundleIdentifier": "com.peestee.employee"

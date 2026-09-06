@@ -20,7 +20,10 @@
       "adaptiveIcon": {
         "backgroundColor": "#0F2440",
         "foregroundImage": "./assets/icon.png"
-      }
+      },
+      "permissions": [
+        "CAMERA"
+      ]
     },
     "ios": {
       "bundleIdentifier": "com.peestee.client"

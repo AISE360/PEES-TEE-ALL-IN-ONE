@@ -11,6 +11,10 @@ import ClockIn from "./src/screens/ClockIn";
 import KYC from "./src/screens/KYC";
 import PaymentSuccess from "./src/screens/PaymentSuccess";
 import SelfService from "./src/screens/SelfService";
+import LeaveScreen from "./src/screens/Leave";
+import SalarySlips from "./src/screens/SalarySlips";
+import Clients from "./src/screens/Clients";
+import Reports from "./src/screens/Reports";
 
 const Stack = createNativeStackNavigator();
 function App(){
@@ -24,6 +28,10 @@ function App(){
           <Stack.Screen name="ClockIn" component={ClockIn} />
           <Stack.Screen name="KYC" component={KYC} />
           <Stack.Screen name="PaymentSuccess" component={PaymentSuccess} />
+          <Stack.Screen name="Leave" component={LeaveScreen} />
+          <Stack.Screen name="Salary" component={SalarySlips} />
+          <Stack.Screen name="Clients" component={Clients} />
+          <Stack.Screen name="Reports" component={Reports} />
           <Stack.Screen name="Profile" component={SelfService} />
         </Stack.Navigator>
       </NavigationContainer>

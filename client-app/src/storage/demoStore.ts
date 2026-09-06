@@ -1,9 +1,12 @@
 // Offline demo store for Client App — localStorage/AsyncStorage backed, zero backend needed.
 // Uses in-memory cache + optional AsyncStorage if installed (no hard native dep so release bundle stays green).
+export type Attachment = { name: string; uri: string; size?: number; mime?: string };
+
 type Req = {
   id: string; reference: string; serviceType: string; description: string;
   preferredContactTime: string; stage: string;
   stageHistory: { stage: string; at: string }[];
+  attachments: Attachment[];
   createdAt: string; updatedAt: string;
 };
 
@@ -11,7 +14,7 @@ const SEED: Req[] = [
   {
     id: "cr1", reference: "PT24153", serviceType: "Land Documentation",
     description: "Need help with property mutation",
-    preferredContactTime: "2026-09-06 10:00", stage: "IN_PROCESSING",
+    preferredContactTime: "2026-09-06 10:00", stage: "IN_PROCESSING", attachments: [],
     stageHistory: [
       { stage: "APPLIED", at: "2026-09-05T10:30:00Z" },
       { stage: "CONNECTED", at: "2026-09-05T14:15:00Z" },
@@ -22,7 +25,7 @@ const SEED: Req[] = [
   {
     id: "cr2", reference: "PT11021", serviceType: "Premium Quotes",
     description: "Premium quote for plot registration",
-    preferredContactTime: "2026-09-07 11:00", stage: "APPLIED",
+    preferredContactTime: "2026-09-07 11:00", stage: "APPLIED", attachments: [],
     stageHistory: [{ stage: "APPLIED", at: new Date().toISOString() }],
     createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
   },
@@ -73,12 +76,12 @@ export async function loadRequests(): Promise<Req[]> {
   return mem;
 }
 
-export async function saveRequest(input: { serviceType: string; description: string; preferredContactTime: string }): Promise<Req> {
+export async function saveRequest(input: { serviceType: string; description: string; preferredContactTime: string; attachments?: Attachment[] }): Promise<Req> {
   await loadRequests();
   const entry: Req = {
     id: `cr_${Date.now()}`, reference: genRef(mem.map((m) => m.reference)),
     serviceType: input.serviceType, description: input.description,
-    preferredContactTime: input.preferredContactTime, stage: "APPLIED",
+    preferredContactTime: input.preferredContactTime, attachments: input.attachments || [], stage: "APPLIED",
     stageHistory: [{ stage: "APPLIED", at: new Date().toISOString() }],
     createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
   };
