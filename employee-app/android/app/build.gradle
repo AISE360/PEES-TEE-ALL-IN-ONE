@@ -4,6 +4,12 @@ apply plugin: "com.facebook.react"
 
 def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
 
+// Monorepo (npm workspaces) hoists react-native to the repo root, so point
+// react-native-screens at the single shared copy (avoids dual-copy runtime crash).
+project.ext {
+    REACT_NATIVE_NODE_MODULES_DIR = new File(rootDir, "../../node_modules/react-native").getAbsolutePath()
+}
+
 static def versionToNumber(major, minor, patch) {
   return patch * 100 + minor * 10000 + major * 1000000
 }

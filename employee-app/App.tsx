@@ -1,5 +1,6 @@
 import React from "react";
 import "react-native-gesture-handler";
+import { registerRootComponent } from "expo";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -12,7 +13,7 @@ import PaymentSuccess from "./src/screens/PaymentSuccess";
 import SelfService from "./src/screens/SelfService";
 
 const Stack = createNativeStackNavigator();
-export default function App(){
+function App(){
   return (
     <GestureHandlerRootView style={{flex:1}}>
       <NavigationContainer>
@@ -29,3 +30,4 @@ export default function App(){
     </GestureHandlerRootView>
   );
 }
+export default registerRootComponent(App);
