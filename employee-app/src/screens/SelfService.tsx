@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import { View, Text, ScrollView, Alert } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { Screen, BackHeader, Reveal, Card, PressableScale } from "../components/UI";
+import { I, Tile } from "../components/icons";
 import { theme, shadow } from "../theme";
 import { getLeaves, getSalarySlips, getShifts, clockOut, leaveBalance } from "../storage/demoStore";
 import { getCurrentUser, clearSession } from "../storage/auth";
@@ -22,13 +23,13 @@ export default function SelfService({ navigation }: any) {
   }, []));
 
   const rows: { icon: string; label: string; hint: string; fn: () => void }[] = [
-    { icon: "👤", label: "My Profile", hint: displayName, fn: () => Alert.alert("My Profile", `${displayName}\n${displayRole} • ${displayId}\n+91 ${user?.phone || "8888888888"}\nHBR Layout HO site`) },
-    { icon: "🏖️", label: "Leave Application", hint: `${counts.leaves} request(s)`, fn: () => navigation.navigate("Leave") },
-    { icon: "📅", label: "Leave Balance", hint: `${leaveBalance()} Days`, fn: () => navigation.navigate("Leave") },
-    { icon: "💵", label: "Salary Slips", hint: `${counts.slips} slip(s)`, fn: () => navigation.navigate("Salary") },
-    { icon: "⏱️", label: "Shift History", hint: `${counts.shifts} shift(s)`, fn: () => navigation.navigate("ClockIn") },
-    { icon: "👥", label: "My Clients", hint: "View", fn: () => navigation.navigate("Clients") },
-    { icon: "📊", label: "End-of-Day Reports", hint: "Submit", fn: () => navigation.navigate("Reports") },
+    { icon: "user", label: "My Profile", hint: displayName, fn: () => Alert.alert("My Profile", `${displayName}\n${displayRole} • ${displayId}\n+91 ${user?.phone || "8888888888"}\nHBR Layout HO site`) },
+    { icon: "umbrella", label: "Leave Application", hint: `${counts.leaves} request(s)`, fn: () => navigation.navigate("Leave") },
+    { icon: "calendar", label: "Leave Balance", hint: `${leaveBalance()} Days`, fn: () => navigation.navigate("Leave") },
+    { icon: "banknote", label: "Salary Slips", hint: `${counts.slips} slip(s)`, fn: () => navigation.navigate("Salary") },
+    { icon: "timer", label: "Shift History", hint: `${counts.shifts} shift(s)`, fn: () => navigation.navigate("ClockIn") },
+    { icon: "users", label: "My Clients", hint: "View", fn: () => navigation.navigate("Clients") },
+    { icon: "chart", label: "End-of-Day Reports", hint: "Submit", fn: () => navigation.navigate("Reports") },
   ];
 
   const logout = () => {
@@ -65,12 +66,10 @@ export default function SelfService({ navigation }: any) {
             {rows.map((r, i) => (
               <PressableScale key={r.label} onPress={r.fn}>
                 <View style={{ flexDirection: "row", alignItems: "center", paddingVertical: 12, paddingHorizontal: 10, borderBottomWidth: i < rows.length - 1 ? 1 : 0, borderColor: "#F1F5F9" }}>
-                  <View style={{ width: 38, height: 38, borderRadius: 12, backgroundColor: "#F4F6FA", alignItems: "center", justifyContent: "center", marginRight: 12 }}>
-                    <Text style={{ fontSize: 18 }}>{r.icon}</Text>
-                  </View>
-                  <Text style={{ fontWeight: "700", color: theme.navy, flex: 1 }}>{r.label}</Text>
+                  <Tile name={r.icon} bg="#EFF4F8" box={38} size={18} radius={12} iconColor={theme.navy} />
+                  <Text style={{ fontWeight: "700", color: theme.navyDeep, flex: 1, marginLeft: 12 }}>{r.label}</Text>
                   <Text style={{ color: theme.faint, fontSize: 11, marginRight: 4 }} numberOfLines={1}>{r.hint}</Text>
-                  <Text style={{ color: theme.goldDark, fontWeight: "800" }}>→</Text>
+                  <I name="chevR" size={16} color={theme.gold} />
                 </View>
               </PressableScale>
             ))}
@@ -79,8 +78,9 @@ export default function SelfService({ navigation }: any) {
 
         <Reveal delay={160}>
           <PressableScale onPress={logout}>
-            <View style={{ backgroundColor: "#fff", borderRadius: 16, padding: 16, marginTop: 14, alignItems: "center", borderWidth: 1, borderColor: "#FCA5A5" }}>
-              <Text style={{ color: theme.danger, fontWeight: "800" }}>Logout — terminates telemetry session</Text>
+            <View style={{ backgroundColor: "#fff", borderRadius: 16, padding: 16, marginTop: 14, alignItems: "center", borderWidth: 1, borderColor: "#FCA5A5", flexDirection: "row", justifyContent: "center" }}>
+              <I name="logout" size={17} color={theme.danger} />
+              <Text style={{ color: theme.danger, fontWeight: "800", marginLeft: 8 }}>Logout — terminates telemetry session</Text>
             </View>
           </PressableScale>
         </Reveal>

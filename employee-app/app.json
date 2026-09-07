@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "backgroundColor": "#0B1526",
+      "backgroundColor": "#073A54",
       "image": "./assets/splash.png",
       "resizeMode": "contain"
     },
@@ -39,7 +39,7 @@
       "web"
     ],
     "extra": {
-      "apiUrl": "https://your-backend.onrender.com"
+      "apiUrl": "https://pees-tee-backend.onrender.com"
     },
     "plugins": [
       "expo-local-authentication",

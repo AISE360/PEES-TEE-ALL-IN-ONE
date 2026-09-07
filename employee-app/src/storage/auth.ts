@@ -1,5 +1,5 @@
 // Simple in-memory auth store for Employee App demo
-// Persists across screens without AsyncStorage — reset on app restart
+// Persists across screens without AsyncStorage - reset on app restart
 
 export type AuthUser = {
   id: string;
@@ -9,7 +9,7 @@ export type AuthUser = {
   phone: string;
 };
 
-// Demo user roster — mirrors mockDB seed
+// Demo user roster - mirrors mockDB seed
 const DEMO_USERS: Record<string, AuthUser> = {
   "EMP00001": { id: "u_admin",      name: "Admin",         role: "ADMIN",      employeeId: "EMP00001", phone: "9999999999" },
   "EMP00125": { id: "u_hr",         name: "Rajesh Kumar",  role: "HR",         employeeId: "EMP00125", phone: "8888888888" },
@@ -21,7 +21,7 @@ const DEMO_USERS: Record<string, AuthUser> = {
 
 let _currentUser: AuthUser | null = null;
 
-/** Attempt login — returns user if credentials match demo roster, null otherwise */
+/** Attempt login - returns user if credentials match demo roster, null otherwise */
 export function attemptLogin(identifier: string, password: string): AuthUser | null {
   const clean = identifier.trim();
   const user = DEMO_USERS[clean];

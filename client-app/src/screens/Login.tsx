@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator, ScrollView, Image } from "react-native";
 import { Card, PrimaryButton, Reveal, Screen } from "../components/UI";
+import { I } from "../components/icons";
 import { theme } from "../theme";
 
 const DEMO_PASSWORD = "demo123";
@@ -69,8 +70,9 @@ export default function Login({ navigation }: any) {
                   <Text style={{ color: theme.faint, marginHorizontal: 10, fontSize: 11 }}>OR</Text>
                   <View style={{ flex: 1, height: 1, backgroundColor: theme.line }} />
                 </View>
-                <TouchableOpacity onPress={() => setMode("password")} style={{ borderWidth: 1, borderColor: theme.line, borderRadius: 12, padding: 13, alignItems: "center" }}>
-                  <Text style={{ fontWeight: "700", color: theme.navy }}>🔑 Password Login</Text>
+                <TouchableOpacity onPress={() => setMode("password")} style={{ borderWidth: 1, borderColor: theme.line, borderRadius: 12, padding: 13, alignItems: "center", flexDirection: "row", justifyContent: "center" }}>
+                  <I name="key" size={16} color={theme.navyDeep} />
+                  <Text style={{ fontWeight: "700", color: theme.navyDeep, marginLeft: 8 }}>Password Login</Text>
                 </TouchableOpacity>
               </>
             )}
@@ -110,7 +112,7 @@ export default function Login({ navigation }: any) {
           </Card>
         </Reveal>
         <Reveal delay={220}>
-          <Text style={{ textAlign: "center", color: "#5B6B8C", fontSize: 11, marginTop: 18 }}>📞 +91 89519 37171 · info@peesteegroup.com</Text>
+          <Text style={{ textAlign: "center", color: "#5B6B8C", fontSize: 11, marginTop: 18 }}>Helpline +91 89519 37171 · info@peesteegroup.com</Text>
         </Reveal>
       </ScrollView>
     </Screen>

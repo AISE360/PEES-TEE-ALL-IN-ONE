@@ -32,12 +32,12 @@ const SEED: Req[] = [
 ];
 
 export const SERVICES = [
-  { id: "1", title: "Land Purchase & Due Diligence", desc: "30-yr EC audit + advocate title search", icon: "🤝" },
-  { id: "2", title: "Land Survey & DGPS (Mojini)", desc: "Boundary mapping, fencing & levelling", icon: "📐" },
-  { id: "3", title: "Layouts & Development", desc: "BDA/BMRDA-approved layouts, roads", icon: "🏗️" },
-  { id: "4", title: "Khata, EC, Mutation, DC Conversion", desc: "E-Khata, B→A, Kaveri registration", icon: "📜" },
-  { id: "5", title: "GST, MSME & Company Setup", desc: "GST, Udyam, IEC, Pvt Ltd/LLP", icon: "🏛️" },
-  { id: "6", title: "Cargo, Warehousing & Fleet", desc: "GPS-tracked freight pan-India", icon: "🚚" },
+  { id: "1", title: "Land Purchase & Due Diligence", desc: "30-yr EC audit + advocate title search", icon: "handshake" },
+  { id: "2", title: "Land Survey & DGPS (Mojini)", desc: "Boundary mapping, fencing & levelling", icon: "ruler" },
+  { id: "3", title: "Layouts & Development", desc: "BDA/BMRDA-approved layouts, roads", icon: "hardhat" },
+  { id: "4", title: "Khata, EC, Mutation, DC Conversion", desc: "E-Khata, B→A, Kaveri registration", icon: "filebadge" },
+  { id: "5", title: "GST, MSME & Company Setup", desc: "GST, Udyam, IEC, Pvt Ltd/LLP", icon: "landmark" },
+  { id: "6", title: "Cargo, Warehousing & Fleet", desc: "GPS-tracked freight pan-India", icon: "truck" },
 ];
 
 export const SUPPORT = {

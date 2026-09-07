@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Image, Alert, ActivityIndicator, Modal, ScrollView } from "react-native";
 import { Screen, Reveal, PrimaryButton, PressableScale } from "../components/UI";
+import { I } from "../components/icons";
 import { theme } from "../theme";
 import { attemptLogin, setCurrentUser } from "../storage/auth";
 
@@ -46,7 +47,7 @@ export default function Login({ navigation }: any) {
   };
 
   const forgotPassword = () => {
-    Alert.alert("Forgot Password", "Contact your HR or Admin to reset your password.\n\n📞 +91 89519 37171\n📧 admin@peesteegroup.com\n\nDemo: all accounts use password123");
+    Alert.alert("Forgot Password", "Contact your HR or Admin to reset your password.\n\n+91 89519 37171\nadmin@peesteegroup.com\n\nDemo: all accounts use password123");
   };
 
   return (
@@ -56,7 +57,7 @@ export default function Login({ navigation }: any) {
           <View style={{ backgroundColor: "#fff", borderTopLeftRadius: 28, borderTopRightRadius: 28, padding: 26, paddingBottom: 40 }}>
             <View style={{ width: 44, height: 5, borderRadius: 3, backgroundColor: "#E2E8F0", alignSelf: "center", marginBottom: 16 }} />
             <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: "#FEF3C7", alignItems: "center", justifyContent: "center", alignSelf: "center" }}>
-              <Text style={{ fontSize: 26 }}>🔐</Text>
+              <I name="lock" size={26} color={theme.goldDark} />
             </View>
             <Text style={{ fontWeight: "800", fontSize: 19, textAlign: "center", marginTop: 12, color: theme.navy }}>MFA Verification</Text>
             <Text style={{ textAlign: "center", color: theme.muted, fontSize: 12, marginTop: 4 }}>6-digit OTP sent to your registered mobile</Text>
@@ -70,7 +71,7 @@ export default function Login({ navigation }: any) {
               <Text style={{ color: theme.navy, fontSize: 13, textAlign: "center", marginTop: 12, fontWeight: "700" }}>Resend OTP</Text>
             </PressableScale>
             <PressableScale onPress={() => setShowMfa(false)}>
-              <Text style={{ color: theme.muted, fontSize: 12, textAlign: "center", marginTop: 8 }}>✕ Cancel</Text>
+              <Text style={{ color: theme.muted, fontSize: 12, textAlign: "center", marginTop: 8 }}>Cancel</Text>
             </PressableScale>
           </View>
         </View>
@@ -104,8 +105,9 @@ export default function Login({ navigation }: any) {
             <PressableScale onPress={forgotPassword}>
               <Text style={{ color: theme.muted, textAlign: "center", marginTop: 14, fontSize: 13 }}>Forgot Password?</Text>
             </PressableScale>
-            <View style={{ backgroundColor: "#F8FAFC", borderRadius: 12, padding: 11, marginTop: 14 }}>
-              <Text style={{ fontSize: 11, color: theme.muted, textAlign: "center" }}>🔐 MFA via OTP after login · No self-registration</Text>
+            <View style={{ backgroundColor: "#F8FAFC", borderRadius: 12, padding: 11, marginTop: 14, flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+              <I name="lock" size={13} color={theme.muted} />
+              <Text style={{ fontSize: 11, color: theme.muted, textAlign: "center", marginLeft: 6 }}>MFA via OTP after login · No self-registration</Text>
             </View>
           </View>
         </Reveal>

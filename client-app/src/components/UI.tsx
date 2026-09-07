@@ -5,6 +5,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { theme, shadow } from "../theme";
+import { I, Tile } from "./icons";
 
 /* ── Pressable with Uber-like scale feedback ── */
 export function PressableScale({ children, onPress, style, disabled }: any) {
@@ -85,7 +86,7 @@ export function BackHeader({ title, sub, onBack, right }: any) {
     <View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 16, paddingVertical: 12 }}>
       <PressableScale onPress={onBack}>
         <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: "#fff", alignItems: "center", justifyContent: "center", ...shadow.card }}>
-          <Text style={{ color: theme.navy, fontWeight: "800", fontSize: 18 }}>←</Text>
+          <I name="back" size={19} color={theme.navyDeep} />
         </View>
       </PressableScale>
       <View style={{ marginLeft: 12, flex: 1 }}>
@@ -100,10 +101,10 @@ export function BackHeader({ title, sub, onBack, right }: any) {
 /* ── Floating bottom tab bar ── */
 export function TabBar({ active, navigation, onSupport }: { active: string; navigation: any; onSupport?: () => void }) {
   const tabs = [
-    { key: "Home", icon: "🏠", to: "Home" },
-    { key: "Track", icon: "📍", to: "Track" },
-    { key: "Support", icon: "💬", to: "" },
-    { key: "Profile", icon: "👤", to: "Profile" },
+    { key: "Home", icon: "home", to: "Home" },
+    { key: "Track", icon: "pin", to: "Track" },
+    { key: "Support", icon: "headset", to: "" },
+    { key: "Profile", icon: "user", to: "Profile" },
   ];
   return (
     <View style={{ paddingHorizontal: 16, paddingBottom: 14, paddingTop: 6, backgroundColor: "transparent" }}>
@@ -117,8 +118,8 @@ export function TabBar({ active, navigation, onSupport }: { active: string; navi
           return (
             <PressableScale key={t.key} onPress={go} style={{ flex: 1 }}>
               <View style={{ alignItems: "center", paddingVertical: 8, borderRadius: 18, backgroundColor: on ? theme.gold : "transparent" }}>
-                <Text style={{ fontSize: 19 }}>{t.icon}</Text>
-                <Text style={{ fontSize: 10, marginTop: 2, fontWeight: "700", color: on ? theme.navyDeep : "#8EA0BF" }}>{t.key}</Text>
+                <I name={t.icon} size={20} color={on ? "#FFFFFF" : "#8EA0BF"} />
+                <Text style={{ fontSize: 10, marginTop: 3, fontWeight: "700", color: on ? "#FFFFFF" : "#8EA0BF" }}>{t.key}</Text>
               </View>
             </PressableScale>
           );
@@ -132,11 +133,11 @@ export function TabBar({ active, navigation, onSupport }: { active: string; navi
 export function SearchBar({ value, onChange, onClear, placeholder = "Search for services…" }: any) {
   return (
     <View style={{ backgroundColor: "#fff", borderRadius: 16, paddingHorizontal: 14, paddingVertical: 4, flexDirection: "row", alignItems: "center", ...shadow.card }}>
-      <Text style={{ fontSize: 16 }}>🔍</Text>
+      <I name="search" size={17} color={theme.muted} />
       <TextInput value={value} onChangeText={onChange} placeholder={placeholder} placeholderTextColor="#94A3B8" style={{ marginLeft: 10, flex: 1, fontSize: 14, paddingVertical: 12, color: theme.text }} />
       {value?.length > 0 && (
         <TouchableOpacity onPress={onClear} style={{ padding: 6 }}>
-          <Text style={{ color: theme.muted, fontWeight: "bold" }}>✕</Text>
+          <I name="x" size={16} color={theme.muted} />
         </TouchableOpacity>
       )}
     </View>
@@ -150,8 +151,8 @@ export const Card = ({ children, style }: any) => (
 export function PrimaryButton({ title, onPress, disabled, busy }: any) {
   return (
     <PressableScale onPress={onPress} disabled={disabled || busy}>
-      <View style={{ backgroundColor: disabled ? "#CBD5E1" : theme.gold, paddingVertical: 15, borderRadius: 14, alignItems: "center", opacity: disabled ? 0.7 : 1 }}>
-        <Text style={{ color: theme.navyDeep, fontWeight: "800", fontSize: 16 }}>{busy ? "Please wait…" : title}</Text>
+      <View style={{ backgroundColor: disabled ? "#CBD5E1" : theme.navy, paddingVertical: 15, borderRadius: 14, alignItems: "center", opacity: disabled ? 0.7 : 1 }}>
+        <Text style={{ color: "#FFFFFF", fontWeight: "800", fontSize: 16 }}>{busy ? "Please wait…" : title}</Text>
       </View>
     </PressableScale>
   );
@@ -180,11 +181,11 @@ export function SectionTitle({ title, action, onAction }: any) {
   );
 }
 
-export function EmptyState({ icon = "🔍", title, sub }: any) {
+export function EmptyState({ icon = "search", title, sub }: any) {
   return (
     <Card style={{ alignItems: "center", padding: 28 }}>
-      <Text style={{ fontSize: 40 }}>{icon}</Text>
-      <Text style={{ fontWeight: "800", color: theme.navy, marginTop: 10, fontSize: 16 }}>{title}</Text>
+      <Tile name={icon} bg="#EDF1F6" box={64} size={30} radius={20} iconColor={theme.muted} />
+      <Text style={{ fontWeight: "800", color: theme.navyDeep, marginTop: 10, fontSize: 16 }}>{title}</Text>
       {!!sub && <Text style={{ color: theme.muted, fontSize: 12, marginTop: 4, textAlign: "center" }}>{sub}</Text>}
     </Card>
   );

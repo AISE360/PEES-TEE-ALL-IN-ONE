@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { View, Text, Animated, StatusBar, Easing, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { theme, shadow } from "../theme";
+import { I } from "./icons";
 
 export function PressableScale({ children, onPress, style, disabled }: any) {
   const s = useRef(new Animated.Value(1)).current;
@@ -56,7 +57,7 @@ export function BackHeader({ title, sub, onBack, right }: any) {
     <View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 16, paddingVertical: 12 }}>
       <PressableScale onPress={onBack}>
         <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: "#fff", alignItems: "center", justifyContent: "center", ...shadow.card }}>
-          <Text style={{ color: theme.navy, fontWeight: "800", fontSize: 18 }}>←</Text>
+          <I name="back" size={19} color={theme.navyDeep} />
         </View>
       </PressableScale>
       <View style={{ marginLeft: 12, flex: 1 }}>
@@ -75,8 +76,8 @@ export const Card = ({ children, style }: any) => (
 export function PrimaryButton({ title, onPress, disabled, busy }: any) {
   return (
     <PressableScale onPress={onPress} disabled={disabled || busy}>
-      <View style={{ backgroundColor: disabled ? "#CBD5E1" : theme.gold, paddingVertical: 15, borderRadius: 14, alignItems: "center", opacity: disabled ? 0.7 : 1 }}>
-        <Text style={{ color: theme.navyDeep, fontWeight: "800", fontSize: 16 }}>{busy ? "Please wait…" : title}</Text>
+      <View style={{ backgroundColor: disabled ? "#CBD5E1" : theme.navy, paddingVertical: 15, borderRadius: 14, alignItems: "center", opacity: disabled ? 0.7 : 1 }}>
+        <Text style={{ color: "#FFFFFF", fontWeight: "800", fontSize: 16 }}>{busy ? "Please wait…" : title}</Text>
       </View>
     </PressableScale>
   );

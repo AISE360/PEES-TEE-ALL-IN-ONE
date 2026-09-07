@@ -1,37 +1,49 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Alert } from "react-native";
+import { View, Text, Alert } from "react-native";
 import * as Clipboard from "expo-clipboard";
-import { theme } from "../theme";
+import { Screen, Reveal, PrimaryButton, PressableScale } from "../components/UI";
+import { I } from "../components/icons";
+import { theme, shadow } from "../theme";
 
-export default function PaymentSuccess({navigation, route}:any){
+export default function PaymentSuccess({ navigation, route }: any) {
   const ref = route?.params?.referenceNo || "PT48213";
-  const copy = async()=>{
+  const copy = async () => {
     await Clipboard.setStringAsync(ref);
     Alert.alert("Copied", `Reference ${ref} copied to clipboard.`);
   };
+
   return (
-    <View style={{flex:1, backgroundColor: theme.bg, padding:20, justifyContent:"center", alignItems:"center"}}>
-      <View style={{backgroundColor:"#fff", borderRadius:16, padding:24, alignItems:"center", width:"100%", borderWidth:1, borderColor:"#E2E8F0"}}>
-        <View style={{width:64,height:64, borderRadius:32, backgroundColor:"#0E9F6E", alignItems:"center", justifyContent:"center"}}>
-          <Text style={{color:"#fff", fontSize:32}}>✓</Text>
-        </View>
-        <Text style={{fontWeight:"800", fontSize:20, color:theme.navy, marginTop:14}}>Success!</Text>
-        <Text style={{color:theme.muted, textAlign:"center", marginTop:4}}>Application submitted and saved successfully.</Text>
-
-        <Text style={{color:theme.muted, fontSize:12, marginTop:18}}>Reference Number</Text>
-        <TouchableOpacity onPress={copy} style={{flexDirection:"row", alignItems:"center", marginTop:6, backgroundColor:"#F1F5F9", paddingHorizontal:18, paddingVertical:10, borderRadius:12}}>
-          <Text style={{fontWeight:"900", fontSize:20, color:theme.navy, letterSpacing:1}}>{ref}</Text>
-          <Text style={{marginLeft:8, fontSize:16}}>📋</Text>
-        </TouchableOpacity>
-        <Text style={{color:theme.muted, fontSize:11, textAlign:"center", marginTop:10}}>Tap reference to copy to clipboard.</Text>
-
-        <TouchableOpacity onPress={()=> navigation.navigate("KYC")} style={{borderWidth:1, borderColor:theme.gold, padding:12, borderRadius:10, alignItems:"center", marginTop:20, alignSelf:"stretch"}}>
-          <Text style={{fontWeight:"700", color:theme.navy}}>+ New Application</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={()=> navigation.navigate("Dashboard")} style={{backgroundColor: theme.gold, padding:14, borderRadius:12, alignItems:"center", marginTop:10, alignSelf:"stretch"}}>
-          <Text style={{fontWeight:"700", color:theme.navy}}>Back to Dashboard</Text>
-        </TouchableOpacity>
+    <Screen bg={theme.bg}>
+      <View style={{ flex: 1, padding: 20, justifyContent: "center" }}>
+        <Reveal>
+          <View style={{ backgroundColor: "#fff", borderRadius: 24, padding: 26, alignItems: "center", ...shadow.pop }}>
+            <View style={{ width: 72, height: 72, borderRadius: 36, backgroundColor: theme.success, alignItems: "center", justifyContent: "center" }}>
+              <I name="check" size={34} color="#fff" stroke={3} />
+            </View>
+            <Text style={{ fontWeight: "800", fontSize: 22, color: theme.navyDeep, marginTop: 14 }}>Success</Text>
+            <Text style={{ color: theme.muted, textAlign: "center", marginTop: 4, fontSize: 13 }}>Application submitted and saved successfully.</Text>
+            <Text style={{ color: theme.muted, fontSize: 11, marginTop: 20, fontWeight: "700" }}>REFERENCE NUMBER</Text>
+            <PressableScale onPress={copy}>
+              <View style={{ flexDirection: "row", alignItems: "center", marginTop: 8, backgroundColor: "#EFF4F8", paddingHorizontal: 20, paddingVertical: 12, borderRadius: 14 }}>
+                <Text style={{ fontWeight: "900", fontSize: 22, color: theme.navyDeep, letterSpacing: 1 }}>{ref}</Text>
+                <I name="copy" size={17} color={theme.navy} />
+              </View>
+            </PressableScale>
+            <Text style={{ color: theme.faint, fontSize: 11, textAlign: "center", marginTop: 8 }}>Tap reference to copy to clipboard.</Text>
+            <View style={{ alignSelf: "stretch", marginTop: 20 }}>
+              <PressableScale onPress={() => navigation.navigate("KYC")}>
+                <View style={{ borderWidth: 1.5, borderColor: theme.navy, padding: 13, borderRadius: 14, alignItems: "center", flexDirection: "row", justifyContent: "center" }}>
+                  <I name="next" size={15} color={theme.navyDeep} />
+                  <Text style={{ fontWeight: "800", color: theme.navyDeep, marginLeft: 7 }}>New Application</Text>
+                </View>
+              </PressableScale>
+            </View>
+            <View style={{ alignSelf: "stretch", marginTop: 10 }}>
+              <PrimaryButton title="Back to Dashboard" onPress={() => navigation.navigate("Dashboard")} />
+            </View>
+          </View>
+        </Reveal>
       </View>
-    </View>
+    </Screen>
   );
 }

@@ -4,8 +4,11 @@ import * as Location from "expo-location";
 import * as ImagePicker from "expo-image-picker";
 import MapView, { Marker, Circle } from "react-native-maps";
 import { Screen, BackHeader, Reveal, PrimaryButton, PressableScale } from "../components/UI";
+import { I, Tile } from "../components/icons";
 import { theme, shadow } from "../theme";
 import { clockIn, clockOut, getActiveShift } from "../storage/demoStore";
+import { getCurrentUser } from "../storage/auth";
+import { apiFetch, isApiConfigured } from "../lib/api";
 
 const SITE = { lat: 13.0358, lng: 77.6200, radiusM: 500, name: "Office - HBR Layout" };
 
@@ -46,20 +49,46 @@ export default function ClockIn({ navigation }: any) {
     if (!res.canceled && res.assets?.[0]) { setSelfie(res.assets[0].uri); Alert.alert("Selfie captured", "Live selfie attached to this shift."); }
   };
 
+  // API-first: shift appears on the portal live map; offline falls back to device store.
+  const postClockIn = async (): Promise<boolean> => {
+    try {
+      const user = getCurrentUser();
+      const r = await apiFetch("/api/shifts/clock-in", {
+        method: "POST",
+        body: JSON.stringify({
+          employeeId: user?.id || "u_hr",
+          lat: loc?.lat ?? null, lng: loc?.lng ?? null, selfie: selfie ? "captured" : "",
+        }),
+      });
+      setActive({ ...r.data, clockInAt: r.data.clockInAt, selfieUri: selfie });
+      Alert.alert("Clocked In", "Shift is live on the head-office portal map. GPS tracking started.");
+      navigation.navigate("Dashboard");
+      return true;
+    } catch { return false; }
+  };
+
   const doClockIn = async (demo: boolean) => {
     if (!selfie) { Alert.alert("Selfie required", "Please capture a live selfie before clocking in."); return; }
     if (busy) return;
     setBusy(true);
     try {
+      if (isApiConfigured() && !demo && (await postClockIn())) return;
       const entry = await clockIn({ lat: loc?.lat, lng: loc?.lng, selfieUri: selfie });
       setActive(entry);
-      Alert.alert(demo ? "Checked in (demo override)" : "Clocked In ✅", demo ? `Outside geofence (${distance ?? "?"}m away) — demo override used. GPS tracking started.` : "GPS tracking started. Active Duty badge is now live on the portal map.");
+      Alert.alert(demo ? "Checked in (demo override)" : "Clocked In", demo ? `Outside geofence (${distance ?? "?"}m away) — demo override used. GPS tracking started.` : "GPS tracking started. Active Duty badge is now live on the portal map.");
       navigation.navigate("Dashboard");
     } catch (e: any) { Alert.alert("Failed", e?.message || "Clock-in failed"); }
     finally { setBusy(false); }
   };
 
   const doClockOut = async () => {
+    try {
+      const user = getCurrentUser();
+      await apiFetch("/api/shifts/clock-out", {
+        method: "POST",
+        body: JSON.stringify({ employeeId: user?.id || "u_hr", lat: loc?.lat ?? null, lng: loc?.lng ?? null }),
+      });
+    } catch {}
     const done = await clockOut();
     if (done) { setActive(null); Alert.alert("Clocked Out", `Shift ended at ${new Date(done.clockOutAt!).toLocaleTimeString()}. Tracking stopped.`); navigation.navigate("Dashboard"); }
     else Alert.alert("No active shift", "You are not clocked in.");
@@ -103,7 +132,7 @@ export default function ClockIn({ navigation }: any) {
                 <View key={s} style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
                   <View style={{ alignItems: "center", flex: 1 }}>
                     <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: on ? theme.success : i === 0 ? theme.navyDeep : "#E2E8F0", alignItems: "center", justifyContent: "center" }}>
-                      <Text style={{ color: on || i === 0 ? "#fff" : theme.muted, fontWeight: "800", fontSize: 12 }}>{on ? "✓" : i + 1}</Text>
+                      {on ? <I name="check" size={14} color="#fff" stroke={3} /> : <Text style={{ color: i === 0 ? "#fff" : theme.muted, fontWeight: "800", fontSize: 12 }}>{i + 1}</Text>}
                     </View>
                     <Text style={{ fontSize: 10, fontWeight: "700", color: on ? theme.success : theme.faint, marginTop: 3 }}>{s}</Text>
                   </View>
@@ -123,18 +152,23 @@ export default function ClockIn({ navigation }: any) {
                 <Marker coordinate={{ latitude: loc.lat, longitude: loc.lng }} title="You" pinColor={theme.success} />
               </MapView>
             ) : (
-              <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: theme.navyDeep }}>
-                <Text style={{ fontSize: 44 }}>📍</Text>
-                <Text style={{ color: "#8EA0BF", marginTop: 8, fontSize: 13 }}>Tap below to fetch your GPS location</Text>
-              </View>
+            <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: theme.navyDeep }}>
+              <Tile name="pin" bg="rgba(255,255,255,0.15)" box={72} size={34} radius={22} />
+              <Text style={{ color: "#8EA0BF", marginTop: 10, fontSize: 13 }}>Tap below to fetch your GPS location</Text>
+            </View>
             )}
           </View>
         </Reveal>
 
         <Reveal delay={140}>
           <PressableScale onPress={fetchLocation} disabled={locBusy}>
-            <View style={{ backgroundColor: theme.navyDeep, borderRadius: 14, padding: 14, alignItems: "center", marginTop: 12 }}>
-              {locBusy ? <ActivityIndicator color="#fff" /> : <Text style={{ color: "#fff", fontWeight: "800" }}>{loc ? "🔄 Refresh Location" : "📍 Get My Location"}</Text>}
+            <View style={{ backgroundColor: theme.navyDeep, borderRadius: 14, padding: 14, alignItems: "center", marginTop: 12, flexDirection: "row", justifyContent: "center" }}>
+              {locBusy ? <ActivityIndicator color="#fff" /> : (
+                <>
+                  <I name={loc ? "refresh" : "locate"} size={17} color="#fff" />
+                  <Text style={{ color: "#fff", fontWeight: "800", marginLeft: 8 }}>{loc ? "Refresh Location" : "Get My Location"}</Text>
+                </>
+              )}
             </View>
           </PressableScale>
         </Reveal>
@@ -142,7 +176,7 @@ export default function ClockIn({ navigation }: any) {
         {loc && (
           <Reveal delay={180}>
             <View style={{ backgroundColor: inside ? theme.successBg : theme.dangerBg, borderRadius: 14, padding: 13, flexDirection: "row", alignItems: "center", marginTop: 12 }}>
-              <Text style={{ fontSize: 20 }}>{inside ? "✅" : "⚠️"}</Text>
+              <I name={inside ? "success" : "info"} size={20} color={inside ? theme.success : theme.danger} />
               <Text style={{ marginLeft: 9, color: inside ? theme.success : theme.danger, fontWeight: "800", flex: 1, fontSize: 13 }}>
                 {inside ? `Within ${SITE.name} (${distance}m)` : `${distance}m away — outside ${SITE.radiusM}m geofence`}
               </Text>
@@ -156,11 +190,12 @@ export default function ClockIn({ navigation }: any) {
             <Text style={{ color: theme.muted, fontSize: 12 }}>Front camera only — no gallery for this step</Text>
             {selfie ? <Image source={{ uri: selfie }} style={{ width: 104, height: 104, borderRadius: 52, marginTop: 12, borderWidth: 3, borderColor: theme.gold }} /> :
               <View style={{ width: 104, height: 104, borderRadius: 52, backgroundColor: "#EDF1F6", marginTop: 12, alignItems: "center", justifyContent: "center" }}>
-                <Text style={{ fontSize: 42 }}>🤳</Text>
+                <I name="camera" size={40} color={theme.muted} />
               </View>}
             <PressableScale onPress={takeSelfie}>
-              <View style={{ borderWidth: 1.5, borderColor: theme.gold, borderRadius: 12, paddingHorizontal: 18, paddingVertical: 10, marginTop: 12 }}>
-                <Text style={{ fontWeight: "800", color: theme.navy }}>{selfie ? "🔄 Retake" : "📷 Capture Selfie"}</Text>
+              <View style={{ borderWidth: 1.5, borderColor: theme.gold, borderRadius: 12, paddingHorizontal: 18, paddingVertical: 10, marginTop: 12, flexDirection: "row", alignItems: "center" }}>
+                <I name="camera" size={16} color={theme.navyDeep} />
+                <Text style={{ fontWeight: "800", color: theme.navyDeep, marginLeft: 7 }}>{selfie ? "Retake" : "Capture Selfie"}</Text>
               </View>
             </PressableScale>
           </View>

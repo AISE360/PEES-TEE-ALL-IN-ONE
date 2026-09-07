@@ -2,17 +2,18 @@ import React, { useCallback, useState } from "react";
 import { View, Text, ScrollView, Alert, RefreshControl } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { Screen, Reveal, Skeleton, DutyBadge, PressableScale } from "../components/UI";
+import { I, Tile } from "../components/icons";
 import { theme, shadow } from "../theme";
 import { getActiveShift, clockOut } from "../storage/demoStore";
 import { getCurrentUser } from "../storage/auth";
 
 const tiles = [
-  { label: "Clock In", sub: "Geofence + selfie", icon: "⏱️", to: "ClockIn", tint: "#E1EFFE" },
-  { label: "KYC Enrolment", sub: "New application", icon: "📝", to: "KYC", tint: "#FEF3C7" },
-  { label: "My Clients", sub: "View & manage", icon: "👥", to: "Clients", tint: "#DCFCE7" },
-  { label: "Leave", sub: "Apply for leave", icon: "🏖️", to: "Leave", tint: "#FCE7F3" },
-  { label: "Salary Slips", sub: "View & download", icon: "💵", to: "Salary", tint: "#E0E7FF" },
-  { label: "Reports", sub: "End of day", icon: "📊", to: "Reports", tint: "#FEE2E2" },
+  { label: "Clock In", sub: "Geofence + selfie", icon: "timer", to: "ClockIn", tint: "#E1EFFE", ink: theme.navy },
+  { label: "KYC Enrolment", sub: "New application", icon: "note", to: "KYC", tint: "#F6E9DD", ink: theme.goldDark },
+  { label: "My Clients", sub: "View & manage", icon: "users", to: "Clients", tint: "#DCFCE7", ink: "#0E9F6E" },
+  { label: "Leave", sub: "Apply for leave", icon: "umbrella", to: "Leave", tint: "#FCE7F3", ink: "#BE5A8B" },
+  { label: "Salary Slips", sub: "View & download", icon: "banknote", to: "Salary", tint: "#E0E7FF", ink: "#1C64F2" },
+  { label: "Reports", sub: "End of day", icon: "chart", to: "Reports", tint: "#FEE2E2", ink: "#C2410C" },
 ];
 
 export default function Dashboard({ navigation }: any) {
@@ -56,7 +57,7 @@ export default function Dashboard({ navigation }: any) {
             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
               <View style={{ flex: 1 }}>
                 <Text style={{ color: "#8EA0BF", fontSize: 13 }}>Namaste,</Text>
-                <Text style={{ color: "#fff", fontWeight: "800", fontSize: 22 }}>{displayName} 👋</Text>
+                <Text style={{ color: "#fff", fontWeight: "800", fontSize: 22 }}>{displayName}</Text>
                 <View style={{ flexDirection: "row", marginTop: 6 }}>
                   <View style={{ backgroundColor: "rgba(198,166,100,0.2)", paddingHorizontal: 9, paddingVertical: 4, borderRadius: 999, marginRight: 6 }}>
                     <Text style={{ color: theme.gold, fontWeight: "800", fontSize: 10 }}>{displayRole.toUpperCase()}</Text>
@@ -93,10 +94,8 @@ export default function Dashboard({ navigation }: any) {
                 <Reveal key={t.label} delay={Math.min(i, 5) * 60} style={{ width: "47%" }}>
                   <PressableScale onPress={() => navigation.navigate(t.to)}>
                     <View style={{ backgroundColor: "#fff", borderRadius: 20, padding: 16, alignItems: "flex-start", marginBottom: 12, minHeight: 122, ...shadow.card }}>
-                      <View style={{ width: 44, height: 44, borderRadius: 14, backgroundColor: t.tint, alignItems: "center", justifyContent: "center" }}>
-                        <Text style={{ fontSize: 22 }}>{t.icon}</Text>
-                      </View>
-                      <Text style={{ fontWeight: "800", marginTop: 10, color: theme.navy, fontSize: 14 }}>{t.label}</Text>
+                      <Tile name={t.icon} bg={t.tint} box={44} size={22} radius={14} iconColor={t.ink} />
+                      <Text style={{ fontWeight: "800", marginTop: 10, color: theme.navyDeep, fontSize: 14 }}>{t.label}</Text>
                       <Text style={{ color: theme.muted, fontSize: 11 }}>{t.sub}</Text>
                     </View>
                   </PressableScale>
@@ -116,7 +115,7 @@ export default function Dashboard({ navigation }: any) {
             ) : (
               <PressableScale onPress={() => navigation.navigate("ClockIn")}>
                 <View style={{ backgroundColor: theme.navyDeep, borderRadius: 16, padding: 16, alignItems: "center", marginTop: 4, flexDirection: "row", justifyContent: "center" }}>
-                  <Text style={{ fontSize: 18 }}>🕒</Text>
+                  <I name="clock" size={18} color="#fff" />
                   <Text style={{ color: "#fff", fontWeight: "800", fontSize: 15, marginLeft: 8 }}>Off duty — tap to Clock In</Text>
                 </View>
               </PressableScale>
@@ -125,7 +124,7 @@ export default function Dashboard({ navigation }: any) {
 
           <Reveal delay={240}>
             <View style={{ backgroundColor: theme.goldSoft, borderRadius: 16, padding: 14, marginTop: 12, flexDirection: "row", alignItems: "center" }}>
-              <Text style={{ fontSize: 24 }}>📍</Text>
+              <Tile name="pin" bg={theme.gold} box={40} size={20} radius={13} />
               <Text style={{ color: theme.body, fontSize: 12, marginLeft: 10, flex: 1 }}>HBR Layout HO geofence · front-camera selfie · live portal map while on shift</Text>
             </View>
           </Reveal>
