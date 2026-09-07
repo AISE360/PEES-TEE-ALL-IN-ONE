@@ -32,17 +32,19 @@ const SEED: Req[] = [
 ];
 
 export const SERVICES = [
-  { id: "1", title: "Land Documentation", desc: "Get expert assistance", icon: "🏛️" },
-  { id: "2", title: "Premium Quotes", desc: "Accurate & transparent", icon: "📥" },
-  { id: "3", title: "Legal Assistance", desc: "Professional support", icon: "👤" },
-  { id: "4", title: "Property Verification", desc: "Verify with confidence", icon: "🏠" },
+  { id: "1", title: "Land Purchase & Due Diligence", desc: "30-yr EC audit + advocate title search", icon: "🤝" },
+  { id: "2", title: "Land Survey & DGPS (Mojini)", desc: "Boundary mapping, fencing & levelling", icon: "📐" },
+  { id: "3", title: "Layouts & Development", desc: "BDA/BMRDA-approved layouts, roads", icon: "🏗️" },
+  { id: "4", title: "Khata, EC, Mutation, DC Conversion", desc: "E-Khata, B→A, Kaveri registration", icon: "📜" },
+  { id: "5", title: "GST, MSME & Company Setup", desc: "GST, Udyam, IEC, Pvt Ltd/LLP", icon: "🏛️" },
+  { id: "6", title: "Cargo, Warehousing & Fleet", desc: "GPS-tracked freight pan-India", icon: "🚚" },
 ];
 
 export const SUPPORT = {
   name: "PEES Tee Group Pvt Ltd",
-  address: "HBR Layout, Bengaluru - 560043",
+  address: "#112, 4th Cross, 1st Block, HBR Layout, Bengaluru - 560043",
   email: "info@peesteegroup.com",
-  phone: "+91 (080) 41289652",
+  phone: "+91 89519 37171",
   website: "www.peesteegroup.com",
 };
 

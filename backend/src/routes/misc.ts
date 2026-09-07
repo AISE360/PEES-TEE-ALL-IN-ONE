@@ -57,7 +57,42 @@ miscRouter.post("/upload", (req,res)=>{
 });
 
 miscRouter.get("/support-directory", (req,res)=>{
-  res.json({success:true, data:{ name:"PEES Tee Group Pvt Ltd", address:"HBR Layout, Bengaluru, Karnataka - 560043", email:"info@peesteegroup.com", phone:"+91 (080) 41289652", website:"www.peesteegroup.com"}});
+  res.json({success:true, data:{
+    name:"PEES Tee Group Pvt Ltd",
+    tagline:"Building Trust. Developing Land.",
+    address:"#112, 4th Cross, 1st Block, HBR Layout, Bengaluru, Karnataka - 560043",
+    regdOffice:"#60, 10th Cross, Masjid Road, Devasandra, Bengaluru - 560036",
+    email:"info@peesteegroup.com",
+    phone:"+91 89519 37171",
+    landline:"080-41289652",
+    website:"www.peesteegroup.com",
+    hours:"Mon–Sat, 9:30 AM – 6:30 PM IST",
+    branches:[
+      { name:"Head Office — HBR Layout", address:"#112, 4th Cross, 1st Block, HBR Layout, Bengaluru - 560043", phone:"+91 89519 37171" },
+      { name:"KR Puram Branch", address:"3rd Cross, Haadi Masjid Road, Devasandra, KR Puram, Bengaluru - 560036", phone:"+91 99027 25132" },
+      { name:"Belagavi Regional Branch", address:"Belagavi, Karnataka", phone:"+91 89519 37171" },
+      { name:"KGF Site Office", address:"KGF Project Site, Karnataka", phone:"+91 89519 37171" },
+    ],
+  }});
+});
+
+// Public site content (mirrors peesteegroup.com) — consumed by web-portal, client & employee apps
+miscRouter.get("/site-content", (req,res)=>{
+  res.json({success:true, data:{
+    hero:{ title:"Land Development, Documentation & Logistics — Done Right.", tagline:"Building Trust. Developing Land.",
+      sub:"Trusted corporate solutions for Land Purchase, Land Improvement, Land Development, Property Documentation, Cargo Handling, Warehousing & Logistics across India." },
+    verticals:[
+      { id:"land-purchase", title:"Land Purchase & Due Diligence", desc:"30-year EC audit, advocate title search, escrow-safe transactions." },
+      { id:"land-improvement", title:"Land Improvement & Survey", desc:"DGPS + Mojini, fencing, levelling, agri-land prep." },
+      { id:"land-development", title:"Land Development & Layouts", desc:"BDA/BMRDA-approved residential, commercial & industrial layouts." },
+      { id:"documentation", title:"Property Documentation", desc:"E-Khata/A/B-Khata, EC, mutation, DC conversion, Kaveri registration." },
+      { id:"govt-docs", title:"Government & Essential Docs", desc:"Aadhaar/PAN, ration, caste/income, GST, MSME/Udyam, IEC, company setup." },
+      { id:"logistics", title:"Cargo, Warehousing & Logistics", desc:"GPS-tracked fleet, heavy lift, containers, warehousing pan-India." },
+    ],
+    stages:["APPLIED","CONNECTED","IN_PROCESSING","COMPLETED"],
+    contact:{ helpline:"+91 89519 37171", landline:"080-41289652", email:"info@peesteegroup.com", website:"www.peesteegroup.com",
+      address:"#112, 4th Cross, 1st Block, HBR Layout, Bengaluru - 560043", hours:"Mon–Sat, 9:30 AM – 6:30 PM IST" },
+  }});
 });
 
 // EOD Reports

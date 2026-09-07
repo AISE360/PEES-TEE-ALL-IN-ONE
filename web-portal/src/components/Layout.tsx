@@ -8,7 +8,7 @@ import {
 } from "./Icons";
 
 const nav = [
-  { label: "Dashboard", to: "/", icon: IconDashboard },
+  { label: "Dashboard", to: "/dashboard", icon: IconDashboard },
   { label: "Client Requests", to: "/client-requests", icon: IconClipboard },
   { label: "Premium Apps", to: "/premium", icon: IconShield },
   { label: "Employees", to: "/employees", icon: IconUsers },
@@ -16,6 +16,7 @@ const nav = [
   { label: "Field Tracking", to: "/field-tracking", icon: IconMapPin },
   { label: "Reports", to: "/reports", icon: IconBarChart },
   { label: "Settings", to: "/settings", icon: IconSettings },
+  { label: "← View Website", to: "/", icon: IconMapPin },
 ];
 
 function ToastNotification({ msg, onClose }: { msg: string; onClose: () => void }) {

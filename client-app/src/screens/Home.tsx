@@ -1,130 +1,161 @@
-import React, {useState} from "react";
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Modal, Linking, Alert } from "react-native";
-import { Card } from "../components/UI";
-import { theme } from "../theme";
+import React, { useEffect, useState } from "react";
+import { View, Text, ScrollView, Modal, Linking, RefreshControl } from "react-native";
+import { Card, Reveal, Skeleton, SearchBar, TabBar, SectionTitle, PressableScale, Screen } from "../components/UI";
+import { theme, shadow } from "../theme";
 import { SERVICES, SUPPORT } from "../storage/demoStore";
 
-const SERVICE_META: Record<string, { icon: string; color: string }> = {
-  "Land Documentation": { icon: "📜", color: "#E0E7FF" },
-  "Property Registration": { icon: "🏢", color: "#FEF3C7" },
-  "Tax & Regulatory Filing": { icon: "📊", color: "#FCE7F3" },
-  "Corporate KYC & Compliance": { icon: "🛡️", color: "#DCFCE7" },
-  "Title Deed Verification": { icon: "🔍", color: "#E0F2FE" },
-  "Building Approval & NOC": { icon: "🏗️", color: "#FEE2E2" },
+const META: Record<string, { grad: [string, string]; tag: string }> = {
+  "Land Purchase & Due Diligence": { grad: ["#0F2440", "#2A4063"], tag: "Bestseller" },
+  "Land Survey & DGPS (Mojini)": { grad: ["#7C5E1E", "#C6A664"], tag: "DGPS" },
+  "Layouts & Development": { grad: ["#7F1D1D", "#DC2626"], tag: "Projects" },
+  "Khata, EC, Mutation, DC Conversion": { grad: ["#065F46", "#0E9F6E"], tag: "Popular" },
+  "GST, MSME & Company Setup": { grad: ["#6D28D9", "#A855F7"], tag: "Business" },
+  "Cargo, Warehousing & Fleet": { grad: ["#0C4A6E", "#0284C7"], tag: "24/7 GPS" },
 };
 
-const DEFAULT_META = [
-  { icon: "📜", color: "#E0E7FF" },
-  { icon: "🏢", color: "#FEF3C7" },
-  { icon: "📊", color: "#FCE7F3" },
-  { icon: "🛡️", color: "#DCFCE7" },
-];
+export default function Home({ navigation }: any) {
+  const [q, setQ] = useState("");
+  const [showSupport, setShowSupport] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
-export default function Home({navigation}:any){
-  const [q,setQ]=useState("");
-  const [showSupport,setShowSupport]=useState(false);
+  useEffect(() => { const t = setTimeout(() => setLoading(false), 900); return () => clearTimeout(t); }, []);
+  const onRefresh = async () => { setRefreshing(true); setTimeout(() => setRefreshing(false), 800); };
 
-  const services = SERVICES.map((s,i)=>{
-    const meta = SERVICE_META[s.title] || DEFAULT_META[i % DEFAULT_META.length];
-    return { ...s, icon: meta.icon, color: meta.color };
-  }).filter(s=> s.title.toLowerCase().includes(q.toLowerCase()) || s.desc.toLowerCase().includes(q.toLowerCase()));
+  const services = SERVICES.filter(s =>
+    s.title.toLowerCase().includes(q.toLowerCase()) || s.desc.toLowerCase().includes(q.toLowerCase()));
 
-  const tabs = [
-    {label:"Home", icon:"🏠", to:"Home", active:true},
-    {label:"My Requests", icon:"📋", to:"Track", active:false},
-    {label:"Support", icon:"💬", to:null, active:false},
-    {label:"Profile", icon:"👤", to:"Profile", active:false},
-  ];
+  const supportRow = (icon: string, title: string, sub: string, fn: () => void) => (
+    <PressableScale key={title} onPress={fn}>
+      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, padding: 13, backgroundColor: "#F8FAFC", borderRadius: 14 }}>
+        <Text style={{ fontSize: 22, marginRight: 12 }}>{icon}</Text>
+        <View style={{ flex: 1 }}>
+          <Text style={{ fontWeight: "700", color: theme.navy }}>{title}</Text>
+          <Text style={{ color: theme.muted, fontSize: 12 }} numberOfLines={1}>{sub}</Text>
+        </View>
+        <Text style={{ color: theme.goldDark, fontWeight: "800" }}>→</Text>
+      </View>
+    </PressableScale>
+  );
 
   return (
-    <View style={{flex:1, backgroundColor: theme.bg}}>
-      {/* Support Modal */}
-      <Modal visible={showSupport} transparent animationType="fade" onRequestClose={()=>setShowSupport(false)}>
-        <View style={{flex:1, backgroundColor:"rgba(0,0,0,0.5)", justifyContent:"center", padding:24}}>
-          <View style={{backgroundColor:"#fff", borderRadius:20, padding:24, borderWidth:1, borderColor:"#E2E8F0"}}>
-            <Text style={{fontWeight:"800", fontSize:18, color:theme.navy}}>Corporate Support</Text>
-            <Text style={{color:theme.muted, fontSize:12, marginTop:4}}>PEES Tee Group Pvt Ltd</Text>
-
-            <TouchableOpacity onPress={()=>Linking.openURL(`tel:${SUPPORT.phone.replace(/[^+\d]/g,"")}`)} style={{flexDirection:"row", alignItems:"center", marginTop:20, padding:12, backgroundColor:"#F8FAFC", borderRadius:12}}>
-              <Text style={{fontSize:22, marginRight:12}}>📞</Text>
-              <View>
-                <Text style={{fontWeight:"700", color:theme.navy}}>Call Us</Text>
-                <Text style={{color:theme.muted, fontSize:12}}>{SUPPORT.phone}</Text>
+    <Screen bg={theme.bg}>
+      <Modal visible={showSupport} transparent animationType="slide" onRequestClose={() => setShowSupport(false)}>
+        <View style={{ flex: 1, backgroundColor: "rgba(11,21,38,0.6)", justifyContent: "flex-end" }}>
+          <View style={{ backgroundColor: "#fff", borderTopLeftRadius: 28, borderTopRightRadius: 28, padding: 24, paddingBottom: 36 }}>
+            <View style={{ width: 44, height: 5, borderRadius: 3, backgroundColor: "#E2E8F0", alignSelf: "center", marginBottom: 14 }} />
+            <Text style={{ fontWeight: "800", fontSize: 19, color: theme.navy }}>Corporate Support</Text>
+            <Text style={{ color: theme.muted, fontSize: 12, marginTop: 2 }}>PEES Tee Group Pvt Ltd · {SUPPORT.phone}</Text>
+            {supportRow("📞", "Call Us", SUPPORT.phone, () => Linking.openURL(`tel:${SUPPORT.phone.replace(/[^+\d]/g, "")}`))}
+            {supportRow("📧", "Email Us", SUPPORT.email, () => Linking.openURL(`mailto:${SUPPORT.email}`))}
+            {supportRow("📍", "Find Us", SUPPORT.address, () => Linking.openURL(`https://maps.google.com/?q=${encodeURIComponent(SUPPORT.address)}`))}
+            <PressableScale onPress={() => setShowSupport(false)}>
+              <View style={{ backgroundColor: theme.gold, borderRadius: 14, padding: 15, alignItems: "center", marginTop: 18 }}>
+                <Text style={{ fontWeight: "800", color: theme.navyDeep }}>Close</Text>
               </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={()=>Linking.openURL(`mailto:${SUPPORT.email}`)} style={{flexDirection:"row", alignItems:"center", marginTop:10, padding:12, backgroundColor:"#F8FAFC", borderRadius:12}}>
-              <Text style={{fontSize:22, marginRight:12}}>📧</Text>
-              <View>
-                <Text style={{fontWeight:"700", color:theme.navy}}>Email Us</Text>
-                <Text style={{color:theme.muted, fontSize:12}}>{SUPPORT.email}</Text>
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={()=>Linking.openURL(`https://maps.google.com/?q=${encodeURIComponent(SUPPORT.address)}`)} style={{flexDirection:"row", alignItems:"center", marginTop:10, padding:12, backgroundColor:"#F8FAFC", borderRadius:12}}>
-              <Text style={{fontSize:22, marginRight:12}}>📍</Text>
-              <View style={{flex:1}}>
-                <Text style={{fontWeight:"700", color:theme.navy}}>Find Us</Text>
-                <Text style={{color:theme.muted, fontSize:12}}>{SUPPORT.address}</Text>
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={()=>setShowSupport(false)} style={{backgroundColor:theme.gold, borderRadius:12, padding:14, alignItems:"center", marginTop:20}}>
-              <Text style={{fontWeight:"700", color:theme.navy}}>Close</Text>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         </View>
       </Modal>
 
-      <View style={{backgroundColor: theme.navy, paddingTop:48, paddingBottom:24, paddingHorizontal:20, borderBottomLeftRadius:24, borderBottomRightRadius:24}}>
-        <Text style={{color:"#CBD5E1"}}>Good Morning,</Text>
-        <Text style={{color:"#fff", fontSize:22, fontWeight:"800"}}>Sufiyan</Text>
-        <Text style={{color:"#94A3B8", fontSize:12, marginTop:4}}>Get the services you need, made simple.</Text>
-        <View style={{backgroundColor:"#fff", borderRadius:12, paddingHorizontal:14, paddingVertical:10, flexDirection:"row", alignItems:"center", marginTop:16}}>
-          <Text style={{fontSize:16}}>🔍</Text>
-          <TextInput value={q} onChangeText={setQ} placeholder="Search for services..." style={{marginLeft:10, flex:1, fontSize:14}} />
-          {q.length>0 && (
-            <TouchableOpacity onPress={()=>setQ("")} style={{padding:4}}>
-              <Text style={{color:theme.muted, fontWeight:"bold"}}>✕</Text>
-            </TouchableOpacity>
-          )}
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 12 }}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.navy} />}
+      >
+        {/* Hero */}
+        <View style={{ backgroundColor: theme.navyDeep, paddingTop: 50, paddingBottom: 24, paddingHorizontal: 20, borderBottomLeftRadius: 28, borderBottomRightRadius: 28 }}>
+          <Reveal>
+            <Text style={{ color: "#8EA0BF", fontSize: 13 }}>Good Morning,</Text>
+            <Text style={{ color: "#fff", fontSize: 25, fontWeight: "800" }}>Sufiyan 👋</Text>
+            <Text style={{ color: theme.gold, fontSize: 12, marginTop: 3, fontWeight: "600" }}>What are we solving today?</Text>
+          </Reveal>
+          <Reveal delay={100}>
+            <View style={{ marginTop: 16 }}>
+              <SearchBar value={q} onChange={setQ} onClear={() => setQ("")} />
+            </View>
+          </Reveal>
+          <Reveal delay={180}>
+            <View style={{ flexDirection: "row", marginTop: 14 }}>
+              <PressableScale style={{ flex: 1 }} onPress={() => navigation.navigate("Track")}>
+                <View style={{ backgroundColor: theme.gold, borderRadius: 16, padding: 14, marginRight: 8, flexDirection: "row", alignItems: "center" }}>
+                  <Text style={{ fontSize: 24 }}>📍</Text>
+                  <View style={{ marginLeft: 10 }}>
+                    <Text style={{ fontWeight: "800", color: theme.navyDeep }}>Track</Text>
+                    <Text style={{ fontSize: 11, color: "#4A3F1F" }}>PT reference</Text>
+                  </View>
+                </View>
+              </PressableScale>
+              <PressableScale style={{ flex: 1 }} onPress={() => setShowSupport(true)}>
+                <View style={{ backgroundColor: "rgba(255,255,255,0.12)", borderRadius: 16, padding: 14, marginLeft: 8, flexDirection: "row", alignItems: "center", borderWidth: 1, borderColor: "rgba(255,255,255,0.15)" }}>
+                  <Text style={{ fontSize: 24 }}>💬</Text>
+                  <View style={{ marginLeft: 10 }}>
+                    <Text style={{ fontWeight: "800", color: "#fff" }}>Support</Text>
+                    <Text style={{ fontSize: 11, color: "#8EA0BF" }}>Talk to us</Text>
+                  </View>
+                </View>
+              </PressableScale>
+            </View>
+          </Reveal>
         </View>
-      </View>
 
-      <ScrollView contentContainerStyle={{padding:16}}>
-        <Text style={{fontWeight:"800", color:theme.navy, fontSize:16, marginBottom:12}}>Available Services</Text>
-        {services.length===0 && (
-          <Card style={{alignItems:"center", padding:24}}>
-            <Text style={{fontSize:32}}>🔍</Text>
-            <Text style={{fontWeight:"700", color:theme.navy, marginTop:8}}>No services found</Text>
-            <Text style={{color:theme.muted, fontSize:12, marginTop:2}}>Try a different search term</Text>
-          </Card>
-        )}
-        {services.map(s=>(
-          <TouchableOpacity key={s.id} onPress={()=> navigation.navigate("ServiceDetail", {service:s})}>
-            <Card style={{flexDirection:"row", alignItems:"center", marginBottom:12}}>
-              <View style={{width:48,height:48, borderRadius:12, backgroundColor:s.color, alignItems:"center", justifyContent:"center"}}>
-                <Text style={{fontSize:22}}>{s.icon}</Text>
-              </View>
-              <View style={{marginLeft:12, flex:1}}>
-                <Text style={{fontWeight:"700", color:theme.navy}}>{s.title}</Text>
-                <Text style={{color:theme.muted, fontSize:12, marginTop:2}} numberOfLines={2}>{s.desc}</Text>
-              </View>
-              <Text style={{color:theme.goldDark, fontWeight:"800", fontSize:18}}>→</Text>
+        {/* Services */}
+        <View style={{ padding: 16 }}>
+          <SectionTitle title="Available Services" action="Track order" onAction={() => navigation.navigate("Track")} />
+          {loading ? (
+            <>
+              <Skeleton h={86} r={20} style={{ marginBottom: 12 }} />
+              <Skeleton h={86} r={20} style={{ marginBottom: 12 }} />
+              <Skeleton h={86} r={20} style={{ marginBottom: 12 }} />
+            </>
+          ) : services.length === 0 ? (
+            <Card style={{ alignItems: "center", padding: 28 }}>
+              <Text style={{ fontSize: 36 }}>🔍</Text>
+              <Text style={{ fontWeight: "800", color: theme.navy, marginTop: 8 }}>No services found</Text>
+              <Text style={{ color: theme.muted, fontSize: 12, marginTop: 2 }}>Try a different search term</Text>
             </Card>
-          </TouchableOpacity>
-        ))}
+          ) : (
+            services.map((s, i) => {
+              const m = META[s.title] || { grad: ["#0F2440", "#2A4063"] as [string, string], tag: "Verified" };
+              return (
+                <Reveal key={s.id} delay={Math.min(i, 5) * 70}>
+                  <PressableScale onPress={() => navigation.navigate("ServiceDetail", { service: s })}>
+                    <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 12, backgroundColor: "#fff", borderRadius: 20, padding: 14, ...shadow.card }}>
+                      <View style={{ width: 56, height: 56, borderRadius: 18, backgroundColor: m.grad[0], alignItems: "center", justifyContent: "center" }}>
+                        <Text style={{ fontSize: 26 }}>{s.icon}</Text>
+                      </View>
+                      <View style={{ marginLeft: 13, flex: 1 }}>
+                        <View style={{ flexDirection: "row", alignItems: "center" }}>
+                          <Text style={{ fontWeight: "800", color: theme.navy, fontSize: 14, flex: 1 }} numberOfLines={1}>{s.title}</Text>
+                        </View>
+                        <Text style={{ color: theme.muted, fontSize: 12, marginTop: 2 }} numberOfLines={2}>{s.desc}</Text>
+                        <View style={{ alignSelf: "flex-start", backgroundColor: theme.goldSoft, paddingHorizontal: 8, paddingVertical: 3, borderRadius: 999, marginTop: 6 }}>
+                          <Text style={{ color: theme.goldDark, fontWeight: "800", fontSize: 10 }}>★ {m.tag}</Text>
+                        </View>
+                      </View>
+                      <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: theme.navyDeep, alignItems: "center", justifyContent: "center", marginLeft: 8 }}>
+                        <Text style={{ color: theme.gold, fontWeight: "800", fontSize: 15 }}>→</Text>
+                      </View>
+                    </View>
+                  </PressableScale>
+                </Reveal>
+              );
+            })
+          )}
+
+          {/* Trust strip */}
+          <Reveal delay={200}>
+            <View style={{ backgroundColor: theme.navyDeep, borderRadius: 20, padding: 16, marginTop: 6, flexDirection: "row", alignItems: "center" }}>
+              <Text style={{ fontSize: 28 }}>🛡️</Text>
+              <View style={{ marginLeft: 12, flex: 1 }}>
+                <Text style={{ color: "#fff", fontWeight: "800" }}>30-yr EC verified titles</Text>
+                <Text style={{ color: "#8EA0BF", fontSize: 12 }}>Advocate-vetted · PT-tracked · GST invoiced</Text>
+              </View>
+            </View>
+          </Reveal>
+        </View>
       </ScrollView>
 
-      {/* Bottom Navigation */}
-      <View style={{flexDirection:"row", justifyContent:"space-around", paddingVertical:10, backgroundColor:"#fff", borderTopWidth:1, borderColor:"#E2E8F0"}}>
-        {tabs.map(t=>(
-          <TouchableOpacity key={t.label} onPress={()=>t.to ? (t.to!=="Home" && navigation.navigate(t.to)) : setShowSupport(true)} style={{alignItems:"center", paddingVertical:4, paddingHorizontal:12}}>
-            <Text style={{fontSize:18}}>{t.icon}</Text>
-            <Text style={[{fontSize:11, marginTop:2}, t.active?{color:theme.navy, fontWeight:"700"}:{color:theme.muted}]}>{t.label}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </View>
+      <TabBar active="Home" navigation={navigation} onSupport={() => setShowSupport(true)} />
+    </Screen>
   );
 }
